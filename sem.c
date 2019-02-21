@@ -24,21 +24,24 @@ void run(){
 	pid_t pid = fork();
 	
 	if (pid==0){ // child process
+		
 		output = 'X';
 		for (int i=0; i<5; i++){
-			
 			useResourceSynchronized(output);
 			sleep(2);
 		}
-		printf("\n");
+		
 		exit(EXIT_SUCCESS);
 		
 	} else if (pid>0){ // parent process
+		
 		output = 'O';
 		for (int i=0; i<5; i++){
 			useResourceSynchronized(output);
 			sleep(2);
 		}
+		
+		waitpid(pid, NULL, 0);
 		printf("\n");
 		return;
 		
@@ -60,5 +63,5 @@ void useResourceSynchronized(char ch){
 	fflush(stdout); // flush to print
 	// critical section end
 	
-	sem_post(sem);
+	sem_post(sem); // let someone else have a turn
 }
