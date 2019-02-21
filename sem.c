@@ -9,6 +9,7 @@
 #include <semaphore.h>
 
 void run();
+void useResourceSynchronized(char);
 sem_t *sem;
 
 int main(int argc, char** argv){
@@ -26,7 +27,7 @@ void run(){
 		output = 'X';
 		for (int i=0; i<5; i++){
 			
-			useResourceSynchronized(output, sem);
+			useResourceSynchronized(output);
 			sleep(2);
 		}
 		printf("\n");
@@ -35,9 +36,7 @@ void run(){
 	} else if (pid>0){ // parent process
 		output = 'O';
 		for (int i=0; i<5; i++){
-			sem_wait(sem);
-			useResource(output);
-			sem_post(sem);
+			useResourceSynchronized(output);
 			sleep(2);
 		}
 		printf("\n");
@@ -51,7 +50,7 @@ void run(){
 	return;
 }
 
-void useResource(char ch, sem_t *sem){
+void useResourceSynchronized(char ch){
 	
 	sem_wait(sem); // wait turn
 	
