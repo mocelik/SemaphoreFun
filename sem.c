@@ -25,11 +25,9 @@ void run(){
 	if (pid==0){ // child process
 		output = 'X';
 		for (int i=0; i<5; i++){
-			sem_wait(sem);
-			//sleep(1);
-			printf("%c",output); fflush(stdout); // flush to print
-			sem_post(sem);
-			sleep(1);
+			
+			useResourceSynchronized(output, sem);
+			sleep(2);
 		}
 		printf("\n");
 		exit(EXIT_SUCCESS);
@@ -37,11 +35,10 @@ void run(){
 	} else if (pid>0){ // parent process
 		output = 'O';
 		for (int i=0; i<5; i++){
-			sem_post(sem);
-			//sleep(1);
-			printf("%c",output); fflush(stdout);
 			sem_wait(sem);
-			sleep(1);
+			useResource(output);
+			sem_post(sem);
+			sleep(2);
 		}
 		printf("\n");
 		return;
@@ -52,4 +49,17 @@ void run(){
 	}
 
 	return;
+}
+
+void useResource(char ch, sem_t *sem){
+	
+	sem_wait(sem); // wait turn
+	
+	// critical section beginning
+	sleep(1);
+	printf("%c",ch); 
+	fflush(stdout); // flush to print
+	// critical section end
+	
+	sem_post(sem);
 }
