@@ -7,9 +7,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <semaphore.h>
+#include "sem.h"
 
-void run();
-void useResourceSynchronized(char);
 sem_t *sem;
 
 int main(int argc, char** argv){
